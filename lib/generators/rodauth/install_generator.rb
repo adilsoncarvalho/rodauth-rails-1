@@ -10,6 +10,8 @@ module Rodauth
         source_root "#{__dir__}/templates"
         namespace "rodauth:install"
 
+        class_option :primary_key_type, type: :string, desc: "The type for primary key"
+
         def create_rodauth_migration
           return unless defined?(ActiveRecord::Base)
 
@@ -43,6 +45,11 @@ module Rodauth
         end
 
         private
+
+        def primary_key_type
+          return unless activerecord_at_least?(5, 0)
+          super
+        end
 
         def db_migrate_path
           return "db/migrate" unless activerecord_at_least?(5, 0)
